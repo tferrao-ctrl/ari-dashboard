@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARI Status Dashboard – India CSM | July 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    font-size: 11px;
+  }
+  .page {
+    width: 1280px;
+    min-height: 900px;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0B2447 0%, #19376D 60%, #1565C0 100%);
+    padding: 18px 32px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 3px solid #00A1E0;
+  }
+  .header-left h1 {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .header-left p {
+    color: #90CAF9;
+    font-size: 11px;
+    margin-top: 3px;
+  }
+  .header-right {
+    text-align: right;
+    color: #B0BEC5;
+    font-size: 10px;
+    line-height: 1.6;
+  }
+  .header-right span {
+    color: #64B5F6;
+    font-weight: 600;
+  }
+  .policy-badge {
+    background: rgba(255,193,7,0.15);
+    border: 1px solid #FFC107;
+    border-radius: 4px;
+    padding: 3px 10px;
+    color: #FFD54F;
+    font-size: 9.5px;
+    margin-top: 4px;
+    display: inline-block;
+  }
+
+  /* KPI STRIP */
+  .kpi-strip {
+    background: #0D3B66;
+    padding: 12px 28px;
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+  }
+  .kpi-card {
+    flex: 1;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    padding: 9px 12px;
+    text-align: center;
+    position: relative;
+  }
+  .kpi-card.highlight { background: rgba(0,161,224,0.18); border-color: #00A1E0; }
+  .kpi-card.warn { background: rgba(255,152,0,0.18); border-color: #FF9800; }
+  .kpi-card.danger { background: rgba(244,67,54,0.18); border-color: #F44336; }
+  .kpi-card.success { background: rgba(76,175,80,0.18); border-color: #4CAF50; }
+  .kpi-label {
+    color: #90CAF9;
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .kpi-value {
+    color: #fff;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .kpi-sub {
+    color: #B0BEC5;
+    font-size: 8.5px;
+    margin-top: 3px;
+  }
+  .kpi-card.warn .kpi-value { color: #FFB74D; }
+  .kpi-card.danger .kpi-value { color: #EF9A9A; }
+  .kpi-card.success .kpi-value { color: #A5D6A7; }
+
+  /* BODY */
+  .body { padding: 16px 24px; }
+
+  /* TABLES SECTION */
+  .tables-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  .table-panel {
+    flex: 1;
+    border: 1px solid #e0e4ea;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .table-panel.left { flex: 0 0 46%; }
+  .table-panel.right { flex: 1; }
+  .panel-header {
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.2px;
+  }
+  .panel-header.approved {
+    background: #1B5E20;
+    color: #C8E6C9;
+  }
+  .panel-header.pipeline {
+    background: #0D47A1;
+    color: #BBDEFB;
+  }
+  .panel-header .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot-green { background: #4CAF50; }
+  .dot-blue { background: #2196F3; }
+  .panel-header .count-badge {
+    margin-left: auto;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    background: #F5F7FA;
+    color: #546E7A;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 6px 8px;
+    text-align: left;
+    border-bottom: 1px solid #E0E4EA;
+  }
+  td {
+    padding: 7px 8px;
+    font-size: 10px;
+    color: #2C3E50;
+    border-bottom: 1px solid #F0F2F5;
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #F8F9FA; }
+  .amount { font-weight: 700; font-family: 'Consolas', monospace; }
+  .roi-pill {
+    display: inline-block;
+    border-radius: 10px;
+    padding: 2px 7px;
+    font-size: 9px;
+    font-weight: 700;
+  }
+  .roi-good { background: #E8F5E9; color: #2E7D32; }
+  .roi-warn { background: #FFF3E0; color: #E65100; }
+  .roi-bad  { background: #FFEBEE; color: #B71C1C; }
+  .stage-pill {
+    display: inline-block;
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 9px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .s-eval   { background: #E3F2FD; color: #1565C0; }
+  .s-nom    { background: #FFF8E1; color: #F57F17; }
+  .s-rej    { background: #FFEBEE; color: #C62828; }
+  .s-appr   { background: #E8F5E9; color: #1B5E20; }
+  .exc-tag {
+    display: inline-block;
+    background: #FFF3E0;
+    border: 1px solid #FFCC02;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 8.5px;
+    font-weight: 700;
+    color: #E65100;
+  }
+  .seg-pill {
+    display: inline-block;
+    background: #EDE7F6;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 8.5px;
+    font-weight: 700;
+    color: #4527A0;
+    white-space: nowrap;
+  }
+  .alert-row td { background: #FFF8E1; }
+  .policy-flag {
+    font-size: 8.5px;
+    color: #E65100;
+    font-weight: 700;
+  }
+
+  /* INSIGHTS */
+  .insights-section {
+    background: #F8F9FA;
+    border: 1px solid #E0E4EA;
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+  .insights-header {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #0B2447;
+    border-bottom: 2px solid #00A1E0;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .insights-grid {
+    display: flex;
+    gap: 14px;
+  }
+  .insights-col { flex: 1; }
+  .insights-col h4 {
+    font-size: 10px;
+    font-weight: 700;
+    color: #546E7A;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 7px;
+  }
+  .insight-item {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 7px;
+    align-items: flex-start;
+  }
+  .insight-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-weight: 700;
+  }
+  .icon-warn { background: #FFF3E0; color: #E65100; border: 1px solid #FFB74D; }
+  .icon-flag { background: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
+  .icon-ok   { background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7; }
+  .icon-info { background: #E3F2FD; color: #1565C0; border: 1px solid #90CAF9; }
+  .insight-text {
+    font-size: 10px;
+    color: #37474F;
+    line-height: 1.5;
+  }
+  .insight-text strong { color: #1a1a2e; }
+  .rec-item {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 7px;
+    align-items: flex-start;
+  }
+  .rec-num {
+    background: #0D3B66;
+    color: #fff;
+    font-size: 8.5px;
+    font-weight: 700;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .rec-text {
+    font-size: 10px;
+    color: #37474F;
+    line-height: 1.5;
+  }
+  .rec-text strong { color: #0B2447; }
+
+  /* FOOTER */
+  .footer {
+    background: #0B2447;
+    padding: 7px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #546E7A;
+    font-size: 9px;
+  }
+  .footer span { color: #78909C; }
+  .footer strong { color: #90A4AE; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <h1>Attrition Reduction Investment (ARI) — Status Dashboard</h1>
+    <p>India Customer Success Management &nbsp;|&nbsp; As of July 2026 &nbsp;|&nbsp; Prepared by: Tandel Ferrao, Director CSM</p>
+    <div class="policy-badge">&#9888; ARI Policy: Attrition Forecasted &gt;$250K &amp; Minimum 2× ROI Required</div>
+  </div>
+  <div class="header-right">
+    <div><span>30</span> Accounts Tracked</div>
+    <div><span>CMI-ME &bull; CMI-ATTH &bull; CMI-RCG &bull; TMTHRE &bull; FINS</span></div>
+    <div>FY27 Renewal Cohort</div>
+  </div>
+</div>
+
+<!-- KPI STRIP -->
+<div class="kpi-strip">
+  <div class="kpi-card highlight">
+    <div class="kpi-label">Total Attrition at Risk</div>
+    <div class="kpi-value">$10.8M</div>
+    <div class="kpi-sub">Active ARI accounts only</div>
+  </div>
+  <div class="kpi-card success">
+    <div class="kpi-label">ARI Approved</div>
+    <div class="kpi-value">2</div>
+    <div class="kpi-sub">$3.4M attrition protected</div>
+  </div>
+  <div class="kpi-card warn">
+    <div class="kpi-label">Investment Deployed</div>
+    <div class="kpi-value">$3.05M</div>
+    <div class="kpi-sub">Approved ARI commitments</div>
+  </div>
+  <div class="kpi-card warn">
+    <div class="kpi-label">Active Nominations</div>
+    <div class="kpi-value">10</div>
+    <div class="kpi-sub">$7.2M attrition &bull; $2.2M pipeline investment</div>
+  </div>
+  <div class="kpi-card danger">
+    <div class="kpi-label">Policy Violations</div>
+    <div class="kpi-value">2</div>
+    <div class="kpi-sub">1 approved below 2× ROI &bull; 1 rejected</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Not Required / Closed</div>
+    <div class="kpi-value">16</div>
+    <div class="kpi-sub">ARI not applicable or waived</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Under Evaluation</div>
+    <div class="kpi-value">1</div>
+    <div class="kpi-sub">PayU — $300K attrition</div>
+  </div>
+</div>
+
+<!-- TABLES -->
+<div class="body">
+<div class="tables-row">
+
+  <!-- LEFT: APPROVED -->
+  <div class="table-panel left">
+    <div class="panel-header approved">
+      <span class="dot dot-green"></span>
+      APPROVED ARI
+      <span class="count-badge">2 Accounts</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Account</th>
+          <th>Seg</th>
+          <th>Attrition</th>
+          <th>Investment</th>
+          <th>ROI</th>
+          <th>Status / Next Steps</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Bharti Airtel</strong><br><span style="color:#90A4AE;font-size:9px">Renewal Aug '26 &bull; ACV $4.25M</span></td>
+          <td><span class="seg-pill">TMTHRE</span></td>
+          <td class="amount" style="color:#C62828;">$2.32M</td>
+          <td class="amount">$884K</td>
+          <td><span class="roi-pill roi-good">2.6×</span></td>
+          <td style="font-size:9.5px">Approved upto L4. SOW signature pending from customer. Comms to be established by Sales.</td>
+        </tr>
+        <tr class="alert-row">
+          <td>
+            <strong>TVS Credit Services</strong><br>
+            <span style="color:#90A4AE;font-size:9px">Renewal Jan '27 &bull; ACV $1.06M</span>
+          </td>
+          <td><span class="seg-pill">FINS</span></td>
+          <td class="amount" style="color:#C62828;">$1.06M</td>
+          <td class="amount">$2.17M</td>
+          <td>
+            <span class="roi-pill roi-bad">0.5×</span>
+            <div class="policy-flag">&#9888; Below 2× policy</div>
+          </td>
+          <td style="font-size:9.5px">All approvals in. PS executing next steps. <strong>ROI breach requires review.</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="background:#FFF3E0;padding:6px 10px;border-top:1px solid #FFE0B2;font-size:9px;color:#BF360C;">
+      <strong>&#9888; TVS Credit</strong>: Investment of $2.17M for $1.06M attrition = <strong>0.49× ROI</strong>, in violation of the 2× minimum policy. Escalation recommended.
+    </div>
+  </div>
+
+  <!-- RIGHT: PIPELINE -->
+  <div class="table-panel right">
+    <div class="panel-header pipeline">
+      <span class="dot dot-blue"></span>
+      ARI IN PIPELINE — Nominations, Evaluation &amp; Rejected
+      <span class="count-badge">12 Accounts</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Account</th>
+          <th>Seg</th>
+          <th>Stage</th>
+          <th>Attrition</th>
+          <th>Requested</th>
+          <th>ROI</th>
+          <th>Exc.</th>
+          <th>Key Risk</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Genpact</strong><br><span style="color:#90A4AE;font-size:9px">Jan '27 &bull; ACV $7.0M</span></td>
+          <td><span class="seg-pill">TMTHRE</span></td>
+          <td><span class="stage-pill s-nom">Nomination</span></td>
+          <td class="amount" style="color:#C62828;">$3.00M</td>
+          <td class="amount">$1.00M</td>
+          <td><span class="roi-pill roi-good">3.0×</span></td>
+          <td>—</td>
+          <td style="font-size:9px">CPQ EOS; RLM migration</td>
+        </tr>
+        <tr>
+          <td><strong>Hyundai Autoever (HAEI)</strong><br><span style="color:#90A4AE;font-size:9px">Dec '26 &bull; ACV $2.77M</span></td>
+          <td><span class="seg-pill">CMI-ATTH</span></td>
+          <td><span class="stage-pill s-nom">Nomination</span></td>
+          <td class="amount" style="color:#C62828;">$2.00M</td>
+          <td class="amount">$250K</td>
+          <td><span class="roi-pill roi-good">8.0×</span></td>
+          <td>No</td>
+          <td style="font-size:9px">MC/DC under-utilisation; Sev1s</td>
+        </tr>
+        <tr>
+          <td><strong>Lycadigital</strong><br><span style="color:#90A4AE;font-size:9px">Jan '27 &bull; ACV $582K</span></td>
+          <td><span class="seg-pill">TMTHRE</span></td>
+          <td><span class="stage-pill s-nom">Nomination</span></td>
+          <td class="amount" style="color:#C62828;">$582K</td>
+          <td class="amount">$500K</td>
+          <td><span class="roi-pill roi-warn">1.2×</span></td>
+          <td><span class="exc-tag">EXC</span></td>
+          <td style="font-size:9px">Partner deadlock; CG + DC</td>
+        </tr>
+        <tr>
+          <td><strong>SMARTSHIFT / Porter</strong><br><span style="color:#90A4AE;font-size:9px">Dec '26 &bull; ACV $470K</span></td>
+          <td><span class="seg-pill">CMI-ATTH</span></td>
+          <td><span class="stage-pill s-nom">Nomination</span></td>
+          <td class="amount" style="color:#C62828;">$470K</td>
+          <td class="amount">$72K</td>
+          <td><span class="roi-pill roi-good">6.5×</span></td>
+          <td><span class="exc-tag">EXC</span></td>
+          <td style="font-size:9px">Architecture debt; Agentforce migration</td>
+        </tr>
+        <tr>
+          <td><strong>All Cargo Terminal</strong><br><span style="color:#90A4AE;font-size:9px">Aug '26 &bull; ACV $257K</span></td>
+          <td><span class="seg-pill">CMI-ATTH</span></td>
+          <td><span class="stage-pill s-nom">Nomination</span></td>
+          <td class="amount" style="color:#C62828;">$257K</td>
+          <td class="amount" style="color:#E65100;">TBD</td>
+          <td style="font-size:9px;color:#E65100;">Not set</td>
+          <td><span class="exc-tag">EXC</span></td>
+          <td style="font-size:9px">Service Cloud; Agentforce POC</td>
+        </tr>
+        <tr>
+          <td><strong>JSW One Platforms</strong><br><span style="color:#90A4AE;font-size:9px">Jul '26 &bull; ACV $400K</span></td>
+          <td><span class="seg-pill">CMI-ME</span></td>
+          <td><span class="stage-pill s-nom">Nomination</span></td>
+          <td class="amount" style="color:#C62828;">$214K</td>
+          <td class="amount">$72K</td>
+          <td><span class="roi-pill roi-good">3.0×</span></td>
+          <td><span class="exc-tag">EXC</span></td>
+          <td style="font-size:9px">Shelfware; License SWAP</td>
+        </tr>
+        <tr>
+          <td><strong>Reliance BP Mobility</strong><br><span style="color:#90A4AE;font-size:9px">Oct '26 &bull; ACV $206K</span></td>
+          <td><span class="seg-pill">CMI-ME</span></td>
+          <td><span class="stage-pill s-nom">Nomination</span></td>
+          <td class="amount" style="color:#C62828;">$206K</td>
+          <td class="amount">$72K</td>
+          <td><span class="roi-pill roi-good">2.9×</span></td>
+          <td><span class="exc-tag">EXC</span></td>
+          <td style="font-size:9px">Shelfware; SFS pivot</td>
+        </tr>
+        <tr>
+          <td><strong>Indigene Ltd</strong><br><span style="color:#90A4AE;font-size:9px">Oct '26 &bull; ACV $200K</span></td>
+          <td><span class="seg-pill">TMTHRE</span></td>
+          <td><span class="stage-pill s-nom">Nomination</span></td>
+          <td class="amount" style="color:#C62828;">$200K</td>
+          <td class="amount">$100K</td>
+          <td><span class="roi-pill roi-warn">2.0×</span></td>
+          <td><span class="exc-tag">EXC</span></td>
+          <td style="font-size:9px">Legacy implementation; CPQ debt</td>
+        </tr>
+        <tr>
+          <td><strong>Suzlon</strong><br><span style="color:#90A4AE;font-size:9px">Offcycle Jul '26 &bull; ACV $293K</span></td>
+          <td><span class="seg-pill">CMI-ME</span></td>
+          <td><span class="stage-pill s-nom">Nomination</span></td>
+          <td class="amount" style="color:#C62828;">$147K</td>
+          <td class="amount">$72K</td>
+          <td><span class="roi-pill roi-warn">2.0×</span></td>
+          <td><span class="exc-tag">EXC</span></td>
+          <td style="font-size:9px">Field Service product issues; CIO escalation</td>
+        </tr>
+        <tr>
+          <td><strong>LT Foods (Daawat)</strong><br><span style="color:#90A4AE;font-size:9px">Sep '26 &bull; ACV $88K</span></td>
+          <td><span class="seg-pill">CMI-RCG</span></td>
+          <td><span class="stage-pill s-nom">Nomination</span></td>
+          <td class="amount" style="color:#C62828;">$88K</td>
+          <td class="amount">$72K</td>
+          <td><span class="roi-pill roi-warn">1.2×</span></td>
+          <td><span class="exc-tag">EXC</span></td>
+          <td style="font-size:9px">Partner failure; non-adoption</td>
+        </tr>
+        <tr>
+          <td><strong>PayU Payments</strong><br><span style="color:#90A4AE;font-size:9px">Nov '26 &bull; ACV $476K</span></td>
+          <td><span class="seg-pill">FINS</span></td>
+          <td><span class="stage-pill s-eval">Evaluation</span></td>
+          <td class="amount" style="color:#C62828;">$300K</td>
+          <td class="amount" style="color:#90A4AE;">—</td>
+          <td style="font-size:9px;color:#90A4AE;">TBD</td>
+          <td>—</td>
+          <td style="font-size:9px">Arch debt; Agentforce migration</td>
+        </tr>
+        <tr>
+          <td><strong>RBL Bank</strong><br><span style="color:#90A4AE;font-size:9px">Sep '26 &bull; ACV $907K</span></td>
+          <td><span class="seg-pill">FINS</span></td>
+          <td><span class="stage-pill s-rej">Rejected</span></td>
+          <td class="amount" style="color:#C62828;">$602K</td>
+          <td class="amount">$800K</td>
+          <td><span class="roi-pill roi-bad">0.75×</span></td>
+          <td><span class="exc-tag">EXC</span></td>
+          <td style="font-size:9px">ROI &lt;2× — SCI rejected</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /tables-row -->
+
+<!-- INSIGHTS & RECOMMENDATIONS -->
+<div class="insights-section">
+  <div class="insights-header">&#128161; Insights &amp; Recommendations</div>
+  <div class="insights-grid">
+
+    <!-- INSIGHTS -->
+    <div class="insights-col">
+      <h4>Key Insights</h4>
+
+      <div class="insight-item">
+        <div class="insight-icon icon-flag">!</div>
+        <div class="insight-text">
+          <strong>TVS Credit ARI Violates Policy:</strong> Approved with $2.17M investment for $1.06M attrition = 0.49× ROI — well below the mandatory 2× threshold. Requires immediate CFO/SCI review and course-correction on scope or investment size.
+        </div>
+      </div>
+
+      <div class="insight-item">
+        <div class="insight-icon icon-warn">▲</div>
+        <div class="insight-text">
+          <strong>HAEI &amp; Genpact Stuck at Nomination:</strong> Combined $5.0M attrition with strong ROI (8× and 3× respectively) — both fully qualify under policy, yet remain unadvanced. Each week of delay increases customer risk.
+        </div>
+      </div>
+
+      <div class="insight-item">
+        <div class="insight-icon icon-warn">▲</div>
+        <div class="insight-text">
+          <strong>Exception Creep:</strong> 8 of 10 nominations carry an Exception flag. The exception pathway is being used as the default route rather than a guardrail — indicating structural pressure to seek ARI outside policy boundaries.
+        </div>
+      </div>
+
+      <div class="insight-item">
+        <div class="insight-icon icon-info">i</div>
+        <div class="insight-text">
+          <strong>Sub-Threshold Accounts Diluting Pipeline:</strong> 4 accounts (Indigene $200K, Reliance BP $206K, JSW One $214K, LT Foods $88K) fall below the $250K attrition threshold. They consume PS bandwidth and review cycles that higher-value accounts need.
+        </div>
+      </div>
+
+      <div class="insight-item">
+        <div class="insight-icon icon-info">i</div>
+        <div class="insight-text">
+          <strong>Porter (SMARTSHIFT) Tagged Exception Incorrectly:</strong> At $470K attrition and 6.5× ROI, Porter qualifies under standard policy. The EXC flag should be reviewed and removed, freeing up the approval path.
+        </div>
+      </div>
+
+      <div class="insight-item">
+        <div class="insight-icon icon-warn">▲</div>
+        <div class="insight-text">
+          <strong>All Cargo — Urgent: No Investment Amount Set:</strong> $257K attrition qualifies under policy, account is already at Nomination, but no PS scope or requested amount has been defined. Renewal window is near (Aug '26).
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RECOMMENDATIONS -->
+    <div class="insights-col">
+      <h4>Recommendations</h4>
+
+      <div class="rec-item">
+        <div class="rec-num">1</div>
+        <div class="rec-text">
+          <strong>Fast-track HAEI and Genpact to Approval:</strong> Both are policy-compliant and high-ROI. Escalate HAEI (8×, $2M at risk) to L4 approval this week. Assign a clear SOW owner for Genpact's RLM migration.
+        </div>
+      </div>
+
+      <div class="rec-item">
+        <div class="rec-num">2</div>
+        <div class="rec-text">
+          <strong>Initiate TVS Credit ARI Review:</strong> The 0.49× ROI is a material policy breach. Convene an SCI review to determine if the investment scope needs to be reduced, or if a strategic override with documented rationale is needed.
+        </div>
+      </div>
+
+      <div class="rec-item">
+        <div class="rec-num">3</div>
+        <div class="rec-text">
+          <strong>Set PS Scope and Amount for All Cargo Immediately:</strong> Nomination is live but investment is undefined and renewal is in August. Assign PS Owner and finalize scope in the next PS sync.
+        </div>
+      </div>
+
+      <div class="rec-item">
+        <div class="rec-num">4</div>
+        <div class="rec-text">
+          <strong>Create a Formal Exception Review Track:</strong> Sub-threshold accounts (Indigene, Reliance BP, JSW One, Suzlon, LT Foods) should not compete with policy-compliant accounts for PS budget. Route them through a separate monthly exception committee.
+        </div>
+      </div>
+
+      <div class="rec-item">
+        <div class="rec-num">5</div>
+        <div class="rec-text">
+          <strong>Re-scope RBL Bank for Policy Compliance:</strong> Rejected at $800K investment for $602K attrition (0.75×). Explore a reduced PS engagement (e.g., $250K advisory) that would achieve &gt;2× ROI while still de-risking the account ahead of Sep '26 renewal.
+        </div>
+      </div>
+
+      <div class="rec-item">
+        <div class="rec-num">6</div>
+        <div class="rec-text">
+          <strong>Advance PayU from Evaluation to Nomination:</strong> $300K attrition qualifies under policy. Complete scope definition and submit for nomination to avoid missing the Nov '26 renewal window.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div><!-- /body -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>Confidential — India CSM Leadership &nbsp;|&nbsp; ARI Dashboard &nbsp;|&nbsp; July 2026</span>
+  <span><strong>Policy:</strong> ARI eligible for accounts with Forecasted Attrition &gt;$250K and minimum 2× ROI &nbsp;|&nbsp; Segments: CMI-ME, CMI-ATTH, CMI-RCG, TMTHRE, FINS</span>
+</div>
+
+</div><!-- /page -->
+</body>
+</html>
