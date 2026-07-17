@@ -465,12 +465,78 @@
     </div>
   </div>
 
-  <!-- RIGHT: PIPELINE -->
-  <div class="table-panel right">
+
+</div><!-- /tables-row -->
+
+<!-- ARI RAISED TABLE -->
+<div class="tables-row" style="margin-bottom:14px;">
+  <div class="table-panel" style="flex:1;">
+    <div class="panel-header" style="background:#1B3A5C;color:#B3D4F5;">
+      <span class="dot" style="background:#4FC3F7;"></span>
+      ARI RAISED — SCI In Approval Workflow
+      <span class="count-badge">4 Accounts</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Account</th>
+          <th>Seg</th>
+          <th>Attrition</th>
+          <th>Requested</th>
+          <th>ROI</th>
+          <th>Exc.</th>
+          <th>Key Risk</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Hyundai Autoever (HAEI)</strong> <a href="https://salesforce.enterprise.slack.com/archives/C0BAE1E6N56" target="_blank" style="font-size:8.5px;background:#0176D3;color:#fff;border-radius:3px;padding:1px 5px;text-decoration:none;font-weight:700;">SCI ↗</a><br><span style="color:#90A4AE;font-size:9px">Renewal Dec '26 &bull; ACV $2.77M</span></td>
+          <td><span class="seg-pill">CMI-ATTH</span></td>
+          <td class="amount" style="color:#C62828;">$1.85M</td>
+          <td class="amount">$250K</td>
+          <td><span class="roi-pill roi-good">7.4×</span></td>
+          <td>No</td>
+          <td style="font-size:9px">Red acct; Sev1s; MC/DC under-utilisation</td>
+        </tr>
+        <tr>
+          <td><strong>SMARTSHIFT / Porter</strong> <a href="https://salesforce.enterprise.slack.com/archives/C06QKUN2DE0/p1784272912104239" target="_blank" style="font-size:8.5px;background:#0176D3;color:#fff;border-radius:3px;padding:1px 5px;text-decoration:none;font-weight:700;">SCI ↗</a><br><span style="color:#90A4AE;font-size:9px">Renewal Dec '26 &bull; ACV $491K</span></td>
+          <td><span class="seg-pill">CMI-ATTH</span></td>
+          <td class="amount" style="color:#C62828;">$491K</td>
+          <td class="amount">$72K</td>
+          <td><span class="roi-pill roi-good">6.8×</span></td>
+          <td><span class="exc-tag">EXC</span></td>
+          <td style="font-size:9px">Tech debt; rearchitect + Agentforce/Sprinklr</td>
+        </tr>
+        <tr>
+          <td><strong>All Cargo Terminal</strong> <a href="https://salesforce.enterprise.slack.com/archives/C0AMTB96KJS/p1782830299908079" target="_blank" style="font-size:8.5px;background:#0176D3;color:#fff;border-radius:3px;padding:1px 5px;text-decoration:none;font-weight:700;">SCI ↗</a><br><span style="color:#90A4AE;font-size:9px">Renewal Aug '26 &bull; ACV $257K</span></td>
+          <td><span class="seg-pill">CMI-ATTH</span></td>
+          <td class="amount" style="color:#C62828;">$257K</td>
+          <td class="amount">$156K</td>
+          <td><span class="roi-pill roi-warn">1.65×</span></td>
+          <td><span class="exc-tag">EXC</span></td>
+          <td style="font-size:9px">Near-zero adoption; Agentforce + Builder Pod</td>
+        </tr>
+        <tr>
+          <td><strong>Reliance BP Mobility</strong> <a href="https://salesforce.enterprise.slack.com/archives/C06QKUN2DE0/p1784272789485639" target="_blank" style="font-size:8.5px;background:#0176D3;color:#fff;border-radius:3px;padding:1px 5px;text-decoration:none;font-weight:700;">SCI ↗</a><br><span style="color:#90A4AE;font-size:9px">Renewal Oct '26 &bull; ACV $206K</span></td>
+          <td><span class="seg-pill">CMI-ME</span></td>
+          <td class="amount" style="color:#C62828;">$206K</td>
+          <td class="amount">$72K</td>
+          <td><span class="roi-pill roi-good">2.9×</span></td>
+          <td><span class="exc-tag">EXC</span></td>
+          <td style="font-size:9px">License swap Core to Salesforce Field Service</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ARI IN PIPE TABLE -->
+<div class="tables-row" style="margin-bottom:14px;">
+  <div class="table-panel" style="flex:1;">
     <div class="panel-header pipeline">
       <span class="dot dot-blue"></span>
-      ARI IN PIPELINE — SCI Raised, Nominations, Evaluation &amp; Rejected
-      <span class="count-badge">11 Accounts</span>
+      ARI IN PIPE — Nominations, Evaluation &amp; Rejected
+      <span class="count-badge">7 Accounts</span>
     </div>
     <table>
       <thead>
@@ -486,48 +552,6 @@
         </tr>
       </thead>
       <tbody>
-        <!-- SCI Raised rows first (most progressed) -->
-        <tr>
-          <td><strong>Hyundai Autoever (HAEI)</strong> <a href="https://salesforce.enterprise.slack.com/archives/C0BAE1E6N56" target="_blank" style="font-size:8.5px;background:#0176D3;color:#fff;border-radius:3px;padding:1px 5px;text-decoration:none;font-weight:700;">SCI ↗</a><br><span style="color:#90A4AE;font-size:9px">Renewal Dec '26 &bull; ACV $2.77M</span></td>
-          <td><span class="seg-pill">CMI-ATTH</span></td>
-          <td><span class="stage-pill s-sci">SCI Raised</span></td>
-          <td class="amount" style="color:#C62828;">$1.85M</td>
-          <td class="amount">$250K</td>
-          <td><span class="roi-pill roi-good">7.4×</span></td>
-          <td>No</td>
-          <td style="font-size:9px">Red acct; Sev1s; MC/DC under-utilisation</td>
-        </tr>
-        <tr>
-          <td><strong>SMARTSHIFT / Porter</strong> <a href="https://salesforce.enterprise.slack.com/archives/C06QKUN2DE0/p1784272912104239" target="_blank" style="font-size:8.5px;background:#0176D3;color:#fff;border-radius:3px;padding:1px 5px;text-decoration:none;font-weight:700;">SCI ↗</a><br><span style="color:#90A4AE;font-size:9px">Renewal Dec '26 &bull; ACV $491K</span></td>
-          <td><span class="seg-pill">CMI-ATTH</span></td>
-          <td><span class="stage-pill s-sci">SCI Raised</span></td>
-          <td class="amount" style="color:#C62828;">$491K</td>
-          <td class="amount">$72K</td>
-          <td><span class="roi-pill roi-good">6.8×</span></td>
-          <td><span class="exc-tag">EXC</span></td>
-          <td style="font-size:9px">Tech debt; rearchitect + Agentforce/Sprinklr</td>
-        </tr>
-        <tr>
-          <td><strong>All Cargo Terminal</strong> <a href="https://salesforce.enterprise.slack.com/archives/C0AMTB96KJS/p1782830299908079" target="_blank" style="font-size:8.5px;background:#0176D3;color:#fff;border-radius:3px;padding:1px 5px;text-decoration:none;font-weight:700;">SCI ↗</a><br><span style="color:#90A4AE;font-size:9px">Renewal Aug '26 &bull; ACV $257K</span></td>
-          <td><span class="seg-pill">CMI-ATTH</span></td>
-          <td><span class="stage-pill s-sci">SCI Raised</span></td>
-          <td class="amount" style="color:#C62828;">$257K</td>
-          <td class="amount">$156K</td>
-          <td><span class="roi-pill roi-warn">1.65×</span></td>
-          <td><span class="exc-tag">EXC</span></td>
-          <td style="font-size:9px">Near-zero adoption; Agentforce + Builder Pod</td>
-        </tr>
-        <tr>
-          <td><strong>Reliance BP Mobility</strong> <a href="https://salesforce.enterprise.slack.com/archives/C06QKUN2DE0/p1784272789485639" target="_blank" style="font-size:8.5px;background:#0176D3;color:#fff;border-radius:3px;padding:1px 5px;text-decoration:none;font-weight:700;">SCI ↗</a><br><span style="color:#90A4AE;font-size:9px">Renewal Oct '26 &bull; ACV $206K</span></td>
-          <td><span class="seg-pill">CMI-ME</span></td>
-          <td><span class="stage-pill s-sci">SCI Raised</span></td>
-          <td class="amount" style="color:#C62828;">$206K</td>
-          <td class="amount">$72K</td>
-          <td><span class="roi-pill roi-good">2.9×</span></td>
-          <td><span class="exc-tag">EXC</span></td>
-          <td style="font-size:9px">License swap Core to Salesforce Field Service</td>
-        </tr>
-        <!-- Nominations -->
         <tr>
           <td><strong>Genpact</strong><br><span style="color:#90A4AE;font-size:9px">Renewal Jan '27 &bull; ACV $7.0M</span></td>
           <td><span class="seg-pill">TMTHRE</span></td>
@@ -556,7 +580,7 @@
           <td class="amount">$100K</td>
           <td><span class="roi-pill roi-warn">2.0×</span></td>
           <td><span class="exc-tag">EXC</span></td>
-          <td style="font-size:9px">Legacy impl; 100+ broken flows; partner dispute</td>
+          <td style="font-size:9px">Legacy impl; CPQ debt; low adoption</td>
         </tr>
         <tr>
           <td><strong>Suzlon Energy</strong><br><span style="color:#90A4AE;font-size:9px">Offcycle Jul '26 &bull; ACV $293K</span></td>
@@ -578,7 +602,6 @@
           <td><span class="exc-tag">EXC</span></td>
           <td style="font-size:9px">DMS non-adoption; SAP integration failure</td>
         </tr>
-        <!-- Evaluation -->
         <tr>
           <td><strong>PayU Payments</strong><br><span style="color:#90A4AE;font-size:9px">Renewal Nov '26 &bull; ACV $476K</span></td>
           <td><span class="seg-pill">FINS</span></td>
@@ -589,7 +612,6 @@
           <td>—</td>
           <td style="font-size:9px">Old architecture; Agentforce migration</td>
         </tr>
-        <!-- Rejected -->
         <tr>
           <td><strong>RBL Bank</strong><br><span style="color:#90A4AE;font-size:9px">Renewal Sep '26 &bull; ACV $908K</span></td>
           <td><span class="seg-pill">FINS</span></td>
@@ -603,8 +625,7 @@
       </tbody>
     </table>
   </div>
-
-</div><!-- /tables-row -->
+</div>
 
 <!-- NOT REQUIRED TABLE -->
 <div class="nr-table-wrap">
