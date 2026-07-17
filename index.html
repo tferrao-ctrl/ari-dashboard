@@ -120,7 +120,7 @@
     border-radius: 8px;
     overflow: hidden;
   }
-  .table-panel.left { flex: 0 0 46%; }
+  .table-panel.left { flex: 0 0 44%; }
   .table-panel.right { flex: 1; }
   .panel-header {
     padding: 8px 14px;
@@ -139,6 +139,10 @@
     background: #0D47A1;
     color: #BBDEFB;
   }
+  .panel-header.notrequired {
+    background: #37474F;
+    color: #CFD8DC;
+  }
   .panel-header .dot {
     width: 8px; height: 8px;
     border-radius: 50%;
@@ -146,6 +150,7 @@
   }
   .dot-green { background: #4CAF50; }
   .dot-blue { background: #2196F3; }
+  .dot-grey { background: #90A4AE; }
   .panel-header .count-badge {
     margin-left: auto;
     background: rgba(255,255,255,0.2);
@@ -198,6 +203,7 @@
   .s-nom    { background: #FFF8E1; color: #F57F17; }
   .s-rej    { background: #FFEBEE; color: #C62828; }
   .s-appr   { background: #E8F5E9; color: #1B5E20; }
+  .s-sci    { background: #EDE7F6; color: #4527A0; }
   .exc-tag {
     display: inline-block;
     background: #FFF3E0;
@@ -223,6 +229,22 @@
     font-size: 8.5px;
     color: #E65100;
     font-weight: 700;
+  }
+
+  /* NOT REQUIRED TABLE */
+  .nr-table-wrap {
+    margin-bottom: 14px;
+    border: 1px solid #e0e4ea;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .nr-table td {
+    padding: 5px 8px;
+    font-size: 9.5px;
+  }
+  .nr-reason {
+    color: #546E7A;
+    font-size: 9px;
   }
 
   /* INSIGHTS */
@@ -342,16 +364,27 @@
 </div>
 
 <!-- KPI STRIP -->
+<!-- KPI derivation:
+  Active ARI = Approved (2) + SCI Raised (4) + Nomination (5)
+  Total attrition at risk: Approved $3.38M + SCI $2.80M + Nomination $3.99M = $10.17M
+  Approved: Bharti Airtel $2,318,182 + TVS Credit $1,059,565 = $3,377,747
+  Investment deployed: $884,250 + $2,170,000 = $3,054,250
+  Active nominations: 5 (Nomination) + 4 (SCI Raised) = 9
+  Pipeline investment requests: Nom $1,744K + SCI $550K = $2.29M
+  Policy violations: TVS Credit 0.49× approved + RBL Bank rejected = 2
+  Not Required: 17 rows
+  Under Evaluation: 1 (PayU)
+-->
 <div class="kpi-strip">
   <div class="kpi-card highlight">
     <div class="kpi-label">Total Attrition at Risk</div>
-    <div class="kpi-value">$10.8M</div>
-    <div class="kpi-sub">Active ARI accounts only</div>
+    <div class="kpi-value">$10.2M</div>
+    <div class="kpi-sub">Active ARI accounts only (Approved + SCI + Nom)</div>
   </div>
   <div class="kpi-card success">
     <div class="kpi-label">ARI Approved</div>
     <div class="kpi-value">2</div>
-    <div class="kpi-sub">$3.4M attrition protected</div>
+    <div class="kpi-sub">$3.38M attrition protected</div>
   </div>
   <div class="kpi-card warn">
     <div class="kpi-label">Investment Deployed</div>
@@ -360,8 +393,8 @@
   </div>
   <div class="kpi-card warn">
     <div class="kpi-label">Active Nominations</div>
-    <div class="kpi-value">10</div>
-    <div class="kpi-sub">$7.2M attrition &bull; $2.2M pipeline investment</div>
+    <div class="kpi-value">9</div>
+    <div class="kpi-sub">4 SCI Raised + 5 Nominations &bull; $2.3M pipeline</div>
   </div>
   <div class="kpi-card danger">
     <div class="kpi-label">Policy Violations</div>
@@ -370,7 +403,7 @@
   </div>
   <div class="kpi-card">
     <div class="kpi-label">Not Required / Closed</div>
-    <div class="kpi-value">16</div>
+    <div class="kpi-value">17</div>
     <div class="kpi-sub">ARI not applicable or waived</div>
   </div>
   <div class="kpi-card">
@@ -409,7 +442,7 @@
           <td class="amount" style="color:#C62828;">$2.32M</td>
           <td class="amount">$884K</td>
           <td><span class="roi-pill roi-good">2.6×</span></td>
-          <td style="font-size:9.5px">Approved upto L4. SOW signature pending from customer. Comms to be established by Sales.</td>
+          <td style="font-size:9.5px">Approved up to L4. SOW signature pending from customer. Comms to be established by Sales.</td>
         </tr>
         <tr class="alert-row">
           <td>
@@ -420,7 +453,7 @@
           <td class="amount" style="color:#C62828;">$1.06M</td>
           <td class="amount">$2.17M</td>
           <td>
-            <span class="roi-pill roi-bad">0.5×</span>
+            <span class="roi-pill roi-bad">0.49×</span>
             <div class="policy-flag">&#9888; Below 2× policy</div>
           </td>
           <td style="font-size:9.5px">All approvals in. PS executing next steps. <strong>ROI breach requires review.</strong></td>
@@ -436,8 +469,8 @@
   <div class="table-panel right">
     <div class="panel-header pipeline">
       <span class="dot dot-blue"></span>
-      ARI IN PIPELINE — Nominations, Evaluation &amp; Rejected
-      <span class="count-badge">12 Accounts</span>
+      ARI IN PIPELINE — SCI Raised, Nominations, Evaluation &amp; Rejected
+      <span class="count-badge">11 Accounts</span>
     </div>
     <table>
       <thead>
@@ -453,125 +486,119 @@
         </tr>
       </thead>
       <tbody>
+        <!-- SCI Raised rows first (most progressed) -->
         <tr>
-          <td><strong>Genpact</strong><br><span style="color:#90A4AE;font-size:9px">Jan '27 &bull; ACV $7.0M</span></td>
+          <td><strong>Hyundai Autoever (HAEI)</strong><br><span style="color:#90A4AE;font-size:9px">Renewal Dec '26 &bull; ACV $2.77M</span></td>
+          <td><span class="seg-pill">CMI-ATTH</span></td>
+          <td><span class="stage-pill s-sci">SCI Raised</span></td>
+          <td class="amount" style="color:#C62828;">$1.85M</td>
+          <td class="amount">$250K</td>
+          <td><span class="roi-pill roi-good">7.4×</span></td>
+          <td>No</td>
+          <td style="font-size:9px">Red acct; Sev1s; MC/DC under-utilisation</td>
+        </tr>
+        <tr>
+          <td><strong>SMARTSHIFT / Porter</strong><br><span style="color:#90A4AE;font-size:9px">Renewal Dec '26 &bull; ACV $491K</span></td>
+          <td><span class="seg-pill">CMI-ATTH</span></td>
+          <td><span class="stage-pill s-sci">SCI Raised</span></td>
+          <td class="amount" style="color:#C62828;">$491K</td>
+          <td class="amount">$72K</td>
+          <td><span class="roi-pill roi-good">6.8×</span></td>
+          <td><span class="exc-tag">EXC</span></td>
+          <td style="font-size:9px">Tech debt; rearchitect + Agentforce/Sprinklr</td>
+        </tr>
+        <tr>
+          <td><strong>All Cargo Terminal</strong><br><span style="color:#90A4AE;font-size:9px">Renewal Aug '26 &bull; ACV $257K</span></td>
+          <td><span class="seg-pill">CMI-ATTH</span></td>
+          <td><span class="stage-pill s-sci">SCI Raised</span></td>
+          <td class="amount" style="color:#C62828;">$257K</td>
+          <td class="amount">$156K</td>
+          <td><span class="roi-pill roi-warn">1.65×</span></td>
+          <td><span class="exc-tag">EXC</span></td>
+          <td style="font-size:9px">Near-zero adoption; Agentforce + Builder Pod</td>
+        </tr>
+        <tr>
+          <td><strong>Reliance BP Mobility</strong><br><span style="color:#90A4AE;font-size:9px">Renewal Oct '26 &bull; ACV $206K</span></td>
+          <td><span class="seg-pill">CMI-ME</span></td>
+          <td><span class="stage-pill s-sci">SCI Raised</span></td>
+          <td class="amount" style="color:#C62828;">$206K</td>
+          <td class="amount">$72K</td>
+          <td><span class="roi-pill roi-good">2.9×</span></td>
+          <td><span class="exc-tag">EXC</span></td>
+          <td style="font-size:9px">License swap Core to Salesforce Field Service</td>
+        </tr>
+        <!-- Nominations -->
+        <tr>
+          <td><strong>Genpact</strong><br><span style="color:#90A4AE;font-size:9px">Renewal Jan '27 &bull; ACV $7.0M</span></td>
           <td><span class="seg-pill">TMTHRE</span></td>
           <td><span class="stage-pill s-nom">Nomination</span></td>
           <td class="amount" style="color:#C62828;">$3.00M</td>
           <td class="amount">$1.00M</td>
           <td><span class="roi-pill roi-good">3.0×</span></td>
           <td>—</td>
-          <td style="font-size:9px">CPQ EOS; RLM migration</td>
+          <td style="font-size:9px">CPQ EOS; PS-led MVP for RLM migration</td>
         </tr>
         <tr>
-          <td><strong>Hyundai Autoever (HAEI)</strong><br><span style="color:#90A4AE;font-size:9px">Dec '26 &bull; ACV $2.77M</span></td>
-          <td><span class="seg-pill">CMI-ATTH</span></td>
-          <td><span class="stage-pill s-nom">Nomination</span></td>
-          <td class="amount" style="color:#C62828;">$2.00M</td>
-          <td class="amount">$250K</td>
-          <td><span class="roi-pill roi-good">8.0×</span></td>
-          <td>No</td>
-          <td style="font-size:9px">MC/DC under-utilisation; Sev1s</td>
-        </tr>
-        <tr>
-          <td><strong>Lycadigital</strong><br><span style="color:#90A4AE;font-size:9px">Jan '27 &bull; ACV $582K</span></td>
+          <td><strong>Lycadigital</strong><br><span style="color:#90A4AE;font-size:9px">Renewal Jan '27 &bull; ACV $582K</span></td>
           <td><span class="seg-pill">TMTHRE</span></td>
           <td><span class="stage-pill s-nom">Nomination</span></td>
           <td class="amount" style="color:#C62828;">$582K</td>
           <td class="amount">$500K</td>
-          <td><span class="roi-pill roi-warn">1.2×</span></td>
+          <td><span class="roi-pill roi-warn">1.16×</span></td>
           <td><span class="exc-tag">EXC</span></td>
-          <td style="font-size:9px">Partner deadlock; CG + DC</td>
+          <td style="font-size:9px">Partner deadlock; CG Cloud + Data Cloud</td>
         </tr>
         <tr>
-          <td><strong>SMARTSHIFT / Porter</strong><br><span style="color:#90A4AE;font-size:9px">Dec '26 &bull; ACV $470K</span></td>
-          <td><span class="seg-pill">CMI-ATTH</span></td>
-          <td><span class="stage-pill s-nom">Nomination</span></td>
-          <td class="amount" style="color:#C62828;">$470K</td>
-          <td class="amount">$72K</td>
-          <td><span class="roi-pill roi-good">6.5×</span></td>
-          <td><span class="exc-tag">EXC</span></td>
-          <td style="font-size:9px">Architecture debt; Agentforce migration</td>
-        </tr>
-        <tr>
-          <td><strong>All Cargo Terminal</strong><br><span style="color:#90A4AE;font-size:9px">Aug '26 &bull; ACV $257K</span></td>
-          <td><span class="seg-pill">CMI-ATTH</span></td>
-          <td><span class="stage-pill s-nom">Nomination</span></td>
-          <td class="amount" style="color:#C62828;">$257K</td>
-          <td class="amount" style="color:#E65100;">TBD</td>
-          <td style="font-size:9px;color:#E65100;">Not set</td>
-          <td><span class="exc-tag">EXC</span></td>
-          <td style="font-size:9px">Service Cloud; Agentforce POC</td>
-        </tr>
-        <tr>
-          <td><strong>JSW One Platforms</strong><br><span style="color:#90A4AE;font-size:9px">Jul '26 &bull; ACV $400K</span></td>
-          <td><span class="seg-pill">CMI-ME</span></td>
-          <td><span class="stage-pill s-nom">Nomination</span></td>
-          <td class="amount" style="color:#C62828;">$214K</td>
-          <td class="amount">$72K</td>
-          <td><span class="roi-pill roi-good">3.0×</span></td>
-          <td><span class="exc-tag">EXC</span></td>
-          <td style="font-size:9px">Shelfware; License SWAP</td>
-        </tr>
-        <tr>
-          <td><strong>Reliance BP Mobility</strong><br><span style="color:#90A4AE;font-size:9px">Oct '26 &bull; ACV $206K</span></td>
-          <td><span class="seg-pill">CMI-ME</span></td>
-          <td><span class="stage-pill s-nom">Nomination</span></td>
-          <td class="amount" style="color:#C62828;">$206K</td>
-          <td class="amount">$72K</td>
-          <td><span class="roi-pill roi-good">2.9×</span></td>
-          <td><span class="exc-tag">EXC</span></td>
-          <td style="font-size:9px">Shelfware; SFS pivot</td>
-        </tr>
-        <tr>
-          <td><strong>Indigene Ltd</strong><br><span style="color:#90A4AE;font-size:9px">Oct '26 &bull; ACV $200K</span></td>
+          <td><strong>Indigene Ltd</strong><br><span style="color:#90A4AE;font-size:9px">Renewal Oct '26 &bull; ACV $200K</span></td>
           <td><span class="seg-pill">TMTHRE</span></td>
           <td><span class="stage-pill s-nom">Nomination</span></td>
           <td class="amount" style="color:#C62828;">$200K</td>
           <td class="amount">$100K</td>
           <td><span class="roi-pill roi-warn">2.0×</span></td>
           <td><span class="exc-tag">EXC</span></td>
-          <td style="font-size:9px">Legacy implementation; CPQ debt</td>
+          <td style="font-size:9px">Legacy impl; 100+ broken flows; partner dispute</td>
         </tr>
         <tr>
-          <td><strong>Suzlon</strong><br><span style="color:#90A4AE;font-size:9px">Offcycle Jul '26 &bull; ACV $293K</span></td>
+          <td><strong>Suzlon Energy</strong><br><span style="color:#90A4AE;font-size:9px">Offcycle Jul '26 &bull; ACV $293K</span></td>
           <td><span class="seg-pill">CMI-ME</span></td>
           <td><span class="stage-pill s-nom">Nomination</span></td>
-          <td class="amount" style="color:#C62828;">$147K</td>
+          <td class="amount" style="color:#C62828;">$166K</td>
           <td class="amount">$72K</td>
-          <td><span class="roi-pill roi-warn">2.0×</span></td>
+          <td><span class="roi-pill roi-good">2.3×</span></td>
           <td><span class="exc-tag">EXC</span></td>
-          <td style="font-size:9px">Field Service product issues; CIO escalation</td>
+          <td style="font-size:9px">FSL product issues; CIO escalation; $85K overdue</td>
         </tr>
         <tr>
-          <td><strong>LT Foods (Daawat)</strong><br><span style="color:#90A4AE;font-size:9px">Sep '26 &bull; ACV $88K</span></td>
+          <td><strong>LT Foods (Daawat)</strong><br><span style="color:#90A4AE;font-size:9px">Renewal Sep '26 &bull; ACV $88K</span></td>
           <td><span class="seg-pill">CMI-RCG</span></td>
           <td><span class="stage-pill s-nom">Nomination</span></td>
-          <td class="amount" style="color:#C62828;">$88K</td>
+          <td class="amount" style="color:#C62828;">$42K</td>
           <td class="amount">$72K</td>
-          <td><span class="roi-pill roi-warn">1.2×</span></td>
+          <td><span class="roi-pill roi-bad">0.58×</span></td>
           <td><span class="exc-tag">EXC</span></td>
-          <td style="font-size:9px">Partner failure; non-adoption</td>
+          <td style="font-size:9px">DMS non-adoption; SAP integration failure</td>
         </tr>
+        <!-- Evaluation -->
         <tr>
-          <td><strong>PayU Payments</strong><br><span style="color:#90A4AE;font-size:9px">Nov '26 &bull; ACV $476K</span></td>
+          <td><strong>PayU Payments</strong><br><span style="color:#90A4AE;font-size:9px">Renewal Nov '26 &bull; ACV $476K</span></td>
           <td><span class="seg-pill">FINS</span></td>
           <td><span class="stage-pill s-eval">Evaluation</span></td>
           <td class="amount" style="color:#C62828;">$300K</td>
           <td class="amount" style="color:#90A4AE;">—</td>
           <td style="font-size:9px;color:#90A4AE;">TBD</td>
           <td>—</td>
-          <td style="font-size:9px">Arch debt; Agentforce migration</td>
+          <td style="font-size:9px">Old architecture; Agentforce migration</td>
         </tr>
+        <!-- Rejected -->
         <tr>
-          <td><strong>RBL Bank</strong><br><span style="color:#90A4AE;font-size:9px">Sep '26 &bull; ACV $907K</span></td>
+          <td><strong>RBL Bank</strong><br><span style="color:#90A4AE;font-size:9px">Renewal Sep '26 &bull; ACV $908K</span></td>
           <td><span class="seg-pill">FINS</span></td>
           <td><span class="stage-pill s-rej">Rejected</span></td>
           <td class="amount" style="color:#C62828;">$602K</td>
           <td class="amount">$800K</td>
           <td><span class="roi-pill roi-bad">0.75×</span></td>
           <td><span class="exc-tag">EXC</span></td>
-          <td style="font-size:9px">ROI &lt;2× — SCI rejected</td>
+          <td style="font-size:9px">SCI rejected — ROI 2× not met</td>
         </tr>
       </tbody>
     </table>
@@ -579,9 +606,168 @@
 
 </div><!-- /tables-row -->
 
+<!-- NOT REQUIRED TABLE -->
+<div class="nr-table-wrap">
+  <div class="panel-header notrequired">
+    <span class="dot dot-grey"></span>
+    NOT REQUIRED / CLOSED — ARI Not Applicable, Waived, or No Risk
+    <span class="count-badge">17 Accounts</span>
+  </div>
+  <table class="nr-table">
+    <thead>
+      <tr>
+        <th>Account</th>
+        <th>Seg</th>
+        <th>Renewal</th>
+        <th>Forecasted Attrition</th>
+        <th>Key Risk / Reason</th>
+        <th>PS Owner</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Page Industries Ltd.</strong></td>
+        <td><span class="seg-pill">CMI-RCG</span></td>
+        <td>Jan '27</td>
+        <td class="amount" style="color:#C62828;">$767K</td>
+        <td class="nr-reason">ARI cancelled — no problem to solve. Level-4 approval was pending.</td>
+        <td>Avi Kapoor</td>
+      </tr>
+      <tr>
+        <td><strong>Cummins India Limited</strong></td>
+        <td><span class="seg-pill">CMI-ME</span></td>
+        <td>Aug '27</td>
+        <td class="amount" style="color:#2E7D32;">+$513K swing</td>
+        <td class="nr-reason">No attrition forecasted. ARI not applicable.</td>
+        <td>NA</td>
+      </tr>
+      <tr>
+        <td><strong>Panasonic Life Solutions India</strong></td>
+        <td><span class="seg-pill">CMI-ME</span></td>
+        <td>Feb '27</td>
+        <td class="amount" style="color:#C62828;">$307K</td>
+        <td class="nr-reason">Business distress — discontinued product lines, downsizing sales team.</td>
+        <td>NA</td>
+      </tr>
+      <tr>
+        <td><strong>Puma Energy Services</strong></td>
+        <td><span class="seg-pill">CMI-ME</span></td>
+        <td>Jan '28</td>
+        <td class="amount" style="color:#C62828;">$311K</td>
+        <td class="nr-reason">Core attrition only $32K (sandboxes). Tableau renewal talks started.</td>
+        <td>NA</td>
+      </tr>
+      <tr>
+        <td><strong>UPL Limited</strong></td>
+        <td><span class="seg-pill">CMI-ME</span></td>
+        <td>Nov '28</td>
+        <td class="amount" style="color:#90A4AE;">$0</td>
+        <td class="nr-reason">Renewal Q4 FY29 — too far out.</td>
+        <td>NA</td>
+      </tr>
+      <tr>
+        <td><strong>Quest Global Engineering</strong></td>
+        <td><span class="seg-pill">TMTHRE</span></td>
+        <td>Sep '26</td>
+        <td class="amount" style="color:#C62828;">$232K</td>
+        <td class="nr-reason">Business direction change — full Microsoft shop evaluating Dynamics. Re-implementation ongoing.</td>
+        <td>NA</td>
+      </tr>
+      <tr>
+        <td><strong>Healthium Medtech</strong></td>
+        <td><span class="seg-pill">TMTHRE</span></td>
+        <td>Dec '28</td>
+        <td class="amount" style="color:#C62828;">$97K</td>
+        <td class="nr-reason">Project significantly delayed — BRD slipped, SAP dependencies. Go-live target July 1.</td>
+        <td>NA</td>
+      </tr>
+      <tr>
+        <td><strong>Interview Kickstart (IKAN)</strong></td>
+        <td><span class="seg-pill">TMTHRE</span></td>
+        <td>Dec '26</td>
+        <td class="amount" style="color:#C62828;">$76K</td>
+        <td class="nr-reason">Delayed implementation. 100+ broken flows. Commercial dispute with partner Forsys.</td>
+        <td>NA</td>
+      </tr>
+      <tr>
+        <td><strong>HDFC Bank Limited</strong></td>
+        <td><span class="seg-pill">FINS</span></td>
+        <td>Jan '27</td>
+        <td class="amount" style="color:#90A4AE;">&lt;$1K</td>
+        <td class="nr-reason">Customer doesn't want a trial. Product gaps (Tableau).</td>
+        <td>Devika Naik</td>
+      </tr>
+      <tr>
+        <td><strong>Piramal Finance Limited</strong></td>
+        <td><span class="seg-pill">FINS</span></td>
+        <td>Aug '26</td>
+        <td class="amount" style="color:#C62828;">$490K</td>
+        <td class="nr-reason">Customer will renew as-is for one year. Business change &amp; distress.</td>
+        <td>Smita Jain</td>
+      </tr>
+      <tr>
+        <td><strong>ASK Investment Managers</strong></td>
+        <td><span class="seg-pill">FINS</span></td>
+        <td>Nov '26</td>
+        <td class="amount" style="color:#C62828;">$298K</td>
+        <td class="nr-reason">Moving to Zoho to save cost. Financial &amp; contractual risk.</td>
+        <td>Hardik Doshi</td>
+      </tr>
+      <tr>
+        <td><strong>Satya Microcapital Limited</strong></td>
+        <td><span class="seg-pill">FINS</span></td>
+        <td>Aug '26</td>
+        <td class="amount" style="color:#C62828;">$172K</td>
+        <td class="nr-reason">Early renewal done 15 May — renewed at $112,745. No further risk.</td>
+        <td>Hardik Doshi</td>
+      </tr>
+      <tr>
+        <td><strong>Pine Labs Pvt Ltd</strong></td>
+        <td><span class="seg-pill">FINS</span></td>
+        <td>Aug '26</td>
+        <td class="amount" style="color:#C62828;">$162K</td>
+        <td class="nr-reason">No risk for renewal as confirmed by AE.</td>
+        <td>Smita Jain</td>
+      </tr>
+      <tr>
+        <td><strong>Bajaj Auto Credit Limited</strong></td>
+        <td><span class="seg-pill">FINS</span></td>
+        <td>Nov '26</td>
+        <td class="amount" style="color:#90A4AE;">—</td>
+        <td class="nr-reason">No risk.</td>
+        <td>Pankaj Bajaj</td>
+      </tr>
+      <tr>
+        <td><strong>L&T Finance Holdings Limited</strong></td>
+        <td><span class="seg-pill">FINS</span></td>
+        <td>Mar '27</td>
+        <td class="amount" style="color:#90A4AE;">—</td>
+        <td class="nr-reason">No risk.</td>
+        <td>Devika Naik</td>
+      </tr>
+      <tr>
+        <td><strong>JSW One Platforms Limited</strong></td>
+        <td><span class="seg-pill">CMI-ME</span></td>
+        <td>Jul '26</td>
+        <td class="amount" style="color:#C62828;">$100K</td>
+        <td class="nr-reason">Attrition reduced to $100K with new BOM. ARI request will not proceed.</td>
+        <td>Kamlesh Joshi</td>
+      </tr>
+      <tr>
+        <td><strong>Blue Star Limited</strong></td>
+        <td><span class="seg-pill">CMI-RCG</span></td>
+        <td>Mar '28</td>
+        <td class="amount" style="color:#C62828;">$800K</td>
+        <td class="nr-reason">Renewal FY29 — attrition unclear. APEX limits, SMS/WhatsApp failures during peak season.</td>
+        <td>Tejsh Shah</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 <!-- INSIGHTS & RECOMMENDATIONS -->
 <div class="insights-section">
-  <div class="insights-header">&#128161; Insights &amp; Recommendations</div>
+  <div class="insights-header">Insights &amp; Recommendations</div>
   <div class="insights-grid">
 
     <!-- INSIGHTS -->
@@ -591,42 +777,49 @@
       <div class="insight-item">
         <div class="insight-icon icon-flag">!</div>
         <div class="insight-text">
-          <strong>TVS Credit ARI Violates Policy:</strong> Approved with $2.17M investment for $1.06M attrition = 0.49× ROI — well below the mandatory 2× threshold. Requires immediate CFO/SCI review and course-correction on scope or investment size.
+          <strong>TVS Credit ARI Violates Policy:</strong> Approved with $2.17M investment for $1.06M attrition = 0.49× ROI — well below the mandatory 2× threshold. Requires immediate SCI review and course-correction on scope or investment size.
+        </div>
+      </div>
+
+      <div class="insight-item">
+        <div class="insight-icon icon-ok">+</div>
+        <div class="insight-text">
+          <strong>All Cargo Terminal Progressed to SCI Raised (New — 14 Jul):</strong> ARI submitted with $156K scope for $257K attrition (1.65× ROI). Agentforce + Builder Pod engagement in play. Renewal is Aug '26 — SOW execution is critical this month.
+        </div>
+      </div>
+
+      <div class="insight-item">
+        <div class="insight-icon icon-ok">+</div>
+        <div class="insight-text">
+          <strong>Porter (SMARTSHIFT) Confirmed at SCI Raised:</strong> $491K attrition, $72K scope, 6.8× ROI. High-value advisory engagement for rearchitecting + Agentforce/Sprinklr chatbot migration. Strong ROI justifies fast-tracking.
         </div>
       </div>
 
       <div class="insight-item">
         <div class="insight-icon icon-warn">▲</div>
         <div class="insight-text">
-          <strong>HAEI &amp; Genpact Stuck at Nomination:</strong> Combined $5.0M attrition with strong ROI (8× and 3× respectively) — both fully qualify under policy, yet remain unadvanced. Each week of delay increases customer risk.
+          <strong>Genpact &amp; HAEI Stuck at Pre-Approval:</strong> Combined $4.85M attrition with strong ROI (3.0× and 7.4×). Both fully qualify under policy. HAEI is at SCI Raised but renewal is Dec '26 — SOW must close in Q3. Genpact at Nomination with no exception flag — unblocked for approval.
         </div>
       </div>
 
       <div class="insight-item">
         <div class="insight-icon icon-warn">▲</div>
         <div class="insight-text">
-          <strong>Exception Creep:</strong> 8 of 10 nominations carry an Exception flag. The exception pathway is being used as the default route rather than a guardrail — indicating structural pressure to seek ARI outside policy boundaries.
+          <strong>Exception Creep Persists:</strong> 8 of 11 pipeline accounts carry an Exception flag. Suzlon ($166K), LT Foods ($42K), Indigene ($200K) are all below the $250K threshold. LT Foods has a negative ROI at 0.58× — should not proceed to nomination.
         </div>
       </div>
 
       <div class="insight-item">
         <div class="insight-icon icon-info">i</div>
         <div class="insight-text">
-          <strong>Sub-Threshold Accounts Diluting Pipeline:</strong> 4 accounts (Indigene $200K, Reliance BP $206K, JSW One $214K, LT Foods $88K) fall below the $250K attrition threshold. They consume PS bandwidth and review cycles that higher-value accounts need.
+          <strong>JSW One Removed from Pipeline:</strong> Attrition reduced to $100K with revised BOM — ARI will not proceed. This is a positive outcome. Suzlon (CIO escalation, $85K payment overdue) and Reliance BP (SCI Raised, Field Service swap) remain live for CMI-ME.
         </div>
       </div>
 
       <div class="insight-item">
         <div class="insight-icon icon-info">i</div>
         <div class="insight-text">
-          <strong>Porter (SMARTSHIFT) Tagged Exception Incorrectly:</strong> At $470K attrition and 6.5× ROI, Porter qualifies under standard policy. The EXC flag should be reviewed and removed, freeing up the approval path.
-        </div>
-      </div>
-
-      <div class="insight-item">
-        <div class="insight-icon icon-warn">▲</div>
-        <div class="insight-text">
-          <strong>All Cargo — Urgent: No Investment Amount Set:</strong> $257K attrition qualifies under policy, account is already at Nomination, but no PS scope or requested amount has been defined. Renewal window is near (Aug '26).
+          <strong>FINS Segment Under Pressure:</strong> RBL Bank rejected, TVS Credit in ROI breach, Piramal and ASK renewing as-is or churning. Only L&T Finance and Bajaj Auto Credit show no risk. Segment needs a structured health review.
         </div>
       </div>
 
@@ -639,42 +832,49 @@
       <div class="rec-item">
         <div class="rec-num">1</div>
         <div class="rec-text">
-          <strong>Fast-track HAEI and Genpact to Approval:</strong> Both are policy-compliant and high-ROI. Escalate HAEI (8×, $2M at risk) to L4 approval this week. Assign a clear SOW owner for Genpact's RLM migration.
+          <strong>Close All Cargo SOW This Week:</strong> ARI submitted 14 Jul with renewal Aug '26. Scope is defined ($156K). PS Owner (Akash Mittal/Ashwarya Nair) must finalise SOW with Chetan Mudgal before end of July or the renewal window will be missed.
         </div>
       </div>
 
       <div class="rec-item">
         <div class="rec-num">2</div>
         <div class="rec-text">
-          <strong>Initiate TVS Credit ARI Review:</strong> The 0.49× ROI is a material policy breach. Convene an SCI review to determine if the investment scope needs to be reduced, or if a strategic override with documented rationale is needed.
+          <strong>Fast-track HAEI and Genpact to Approval:</strong> Both are policy-compliant and high-ROI. HAEI (7.4×, $1.85M at risk) is at SCI Raised — escalate to L4 approval this week. Genpact (3.0×, $3.0M) is at Nomination with no exception — assign SOW owner and advance immediately.
         </div>
       </div>
 
       <div class="rec-item">
         <div class="rec-num">3</div>
         <div class="rec-text">
-          <strong>Set PS Scope and Amount for All Cargo Immediately:</strong> Nomination is live but investment is undefined and renewal is in August. Assign PS Owner and finalize scope in the next PS sync.
+          <strong>Initiate TVS Credit ARI Review:</strong> The 0.49× ROI is a material policy breach on an already-approved ARI. Convene an SCI review to reduce investment scope or formally document a strategic override with executive rationale.
         </div>
       </div>
 
       <div class="rec-item">
         <div class="rec-num">4</div>
         <div class="rec-text">
-          <strong>Create a Formal Exception Review Track:</strong> Sub-threshold accounts (Indigene, Reliance BP, JSW One, Suzlon, LT Foods) should not compete with policy-compliant accounts for PS budget. Route them through a separate monthly exception committee.
+          <strong>Drop LT Foods from Nomination Pipeline:</strong> $42K attrition with $72K requested = 0.58× ROI. Below threshold and below ROI floor. Re-route to standard CSM advisory; do not consume PS budget on this account.
         </div>
       </div>
 
       <div class="rec-item">
         <div class="rec-num">5</div>
         <div class="rec-text">
-          <strong>Re-scope RBL Bank for Policy Compliance:</strong> Rejected at $800K investment for $602K attrition (0.75×). Explore a reduced PS engagement (e.g., $250K advisory) that would achieve &gt;2× ROI while still de-risking the account ahead of Sep '26 renewal.
+          <strong>Advance PayU from Evaluation to Nomination:</strong> $300K attrition qualifies under policy. Scope the Agentforce migration engagement and submit for nomination in July to avoid missing the Nov '26 renewal window.
         </div>
       </div>
 
       <div class="rec-item">
         <div class="rec-num">6</div>
         <div class="rec-text">
-          <strong>Advance PayU from Evaluation to Nomination:</strong> $300K attrition qualifies under policy. Complete scope definition and submit for nomination to avoid missing the Nov '26 renewal window.
+          <strong>Re-scope RBL Bank for Policy Compliance:</strong> Rejected at $800K investment for $602K attrition (0.75×). Explore a reduced PS engagement (~$250K advisory) that achieves &gt;2× ROI ahead of Sep '26 renewal.
+        </div>
+      </div>
+
+      <div class="rec-item">
+        <div class="rec-num">7</div>
+        <div class="rec-text">
+          <strong>Escalate Suzlon Payment Issue:</strong> $85K payment pending alongside CIO escalation and FSL product issues. Financial hold could block ARI scope delivery. Assign a collections + PS coordination owner before Nomination advances.
         </div>
       </div>
 
